@@ -1,0 +1,33 @@
+{
+  "name": "parcel-deploy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html --public-url /goit-js-hw-13-image-finder/",
+    "deploy": "gh-pages -d dist",
+    "predeploy": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elenapanasyuk/goit-js-hw-13-image-finder.git"
+  },
+  "keywords": [],
+  "author": "Elena Panasyuk <elena.panasyuk@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elenapanasyuk/goit-js-hw-13-image-finder/issues"
+  },
+  "homepage": "https://elenapanasyuk.github.io/goit-js-hw-13-image-finder",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.4",
+    "parcel-plugin-nuke-dist": "^1.0.1"
+  },
+  "dependencies": {
+    "@pnotify/core": "^5.2.0",
+    "gh-pages": "^3.1.0",
+    "lodash.debounce": "^4.0.8",
+    "parcel-plugin-handlebars-precompile": "^1.0.2"
+  }
+}
