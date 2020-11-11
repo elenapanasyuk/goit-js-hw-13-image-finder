@@ -4,13 +4,11 @@ import ImagesApiService from './js/images-service';
 import imagesTpl from './templates/imageCard.hbs';
 import LoadMoreBtn from './js/load-more-btn';
 
-const refs = getRefs();
+import '@pnotify/core/dist/BrightTheme.css';
+import '@pnotify/core/dist/PNotify.css';
+import { alert, error } from '@pnotify/core';
 
-const options = {
-  headers: {
-    Authorization: '19039117-820a9ced6542bb27a724ef11a',
-  },
-};
+const refs = getRefs();
 
 const loadMoreBtn = new LoadMoreBtn({
   selector: '[data-action="load-more"]',
@@ -26,6 +24,12 @@ function onSearch(evt) {
   evt.preventDefault();
   imagesApiService.query = evt.currentTarget.elements.query.value;
 
+  if (imagesApiService.query === '') {
+    return alert({
+      text: 'Please enter a keyword!',
+      delay: 2000,
+    });
+  }
   loadMoreBtn.show();
   imagesApiService.resetPage();
   clearImagesContainer();
@@ -34,9 +38,17 @@ function onSearch(evt) {
 
 function fetchImages() {
   loadMoreBtn.disable();
-  imagesApiService.fetchImages().then(hits => {
-    appendImagesMarkup(hits);
-    loadMoreBtn.enable();
+  return imagesApiService.fetchImages().then(hits => {
+    if (hits.length === 0) {
+      loadMoreBtn.hide();
+      error({
+        text: 'No matches, try another keyword!',
+        delay: 2000,
+      });
+    } else {
+      appendImagesMarkup(hits);
+      loadMoreBtn.enable();
+    }
   });
 }
 
@@ -50,29 +62,26 @@ function clearImagesContainer() {
 
 function onScroll() {
   window.scrollTo({
-    top: 1500,
+    top: document.documentElement.clientHeight,
     behavior: 'smooth',
   });
 }
 
 function onLoadMore() {
   fetchImages()
-    .then(
-      setTimeout(() => {
-        window.scrollTo({
-          top: 200,
-          behavior: 'smooth',
-        });
-      }, 1500),
-    )
+    .then(setTimeout(onScroll, 1200))
     .catch(err => console.log(err));
 }
 
-/*
-function onLoadMore() {
-  fetchImages()
-    .then(setTimeout(onScroll(), 5000))
-    .catch(err => console.log(err));
-}
-
-*/
+// function onLoadMore() {
+//   fetchImages()
+//     .then(
+//       setTimeout(() => {
+//         window.scrollTo({
+//           top: document.documentElement.clientHeight,
+//           behavior: 'smooth',
+//         });
+//       }, 1200),
+//     )
+//     .catch(err => console.log(err));
+// }
