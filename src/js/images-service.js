@@ -6,6 +6,15 @@ export default class ImagesApiServise {
     this.searchQuery = '';
     this.page = 1;
   }
+  async fetchImages() {
+    const response = await fetch(
+      `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=6&key=${API_KEY}`,
+    );
+    const { hits } = await response.json();
+    this.incrementPage();
+    return hits;
+  }
+  /*
   fetchImages() {
     return fetch(
       `${BASE_URL}/?image_type=photo&orientation=horizontal&q=${this.searchQuery}&page=${this.page}&per_page=6&key=${API_KEY}`,
@@ -16,6 +25,7 @@ export default class ImagesApiServise {
         return hits;
       });
   }
+  */
   incrementPage() {
     this.page += 1;
   }
